@@ -1,11 +1,11 @@
 
 local local_plugins = {
     {
-        "caleb",
+        "ThePrimeagen/caleb",
         config = function() end
     },
     {
-        "harpoon",
+        "ThePrimeagen/harpoon",
         config = function()
             local harpoon = require("harpoon")
 
@@ -26,6 +26,7 @@ local local_plugins = {
         end
     },
     {
+        "ThePrimeagen/vim-apm",
         config = function()
             --[[
             local apm = require("vim-apm")
@@ -36,7 +37,7 @@ local local_plugins = {
         end
     },
     {
-        "vim-with-me",
+        "ThePrimeagen/vim-with-me",
         config = function() end
     },
 }
