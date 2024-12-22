@@ -12,6 +12,8 @@ return {
         "L3MON4D3/LuaSnip",
         "saadparwaiz1/cmp_luasnip",
         "j-hui/fidget.nvim",
+        "seblj/roslyn.nvim",
+        "tris203/rzls.nvim"
     },
 
     config = function()
@@ -28,12 +30,20 @@ return {
             cmp_lsp.default_capabilities())
 
         require("fidget").setup({})
-        require("mason").setup()
+        require('mason').setup {
+            registries = {
+              'github:mason-org/mason-registry',
+              'github:crashdummyy/mason-registry',
+            },
+          }
         require("mason-lspconfig").setup({
             ensure_installed = {
                 "lua_ls",
                 "rust_analyzer",
                 "gopls",
+                "roslyn",
+                "rzls",
+                "html-lsp"
             },
             handlers = {
                 function(server_name) -- default handler (optional)
@@ -74,6 +84,34 @@ return {
                 end,
             }
         })
+
+        require('roslyn').setup {
+            args = {
+              '--logLevel=Information',
+              '--extensionLogDirectory=' .. vim.fs.dirname(vim.lsp.get_log_path()),
+              '--razorSourceGenerator=' .. vim.fs.joinpath(
+                vim.fn.stdpath 'data' --[[@as string]],
+                'mason',
+                'packages',
+                'roslyn',
+                'libexec',
+                'Microsoft.CodeAnalysis.Razor.Compiler.dll'
+              ),
+              '--razorDesignTimePath=' .. vim.fs.joinpath(
+                vim.fn.stdpath 'data' --[[@as string]],
+                'mason',
+                'packages',
+                'rzls',
+                'libexec',
+                'Targets',
+                'Microsoft.NET.Sdk.Razor.DesignTime.targets'
+              ),
+            },
+            config = {
+              capabilities = capabilities,
+              handlers = require 'rzls.roslyn_handlers',
+            },
+          }
 
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
